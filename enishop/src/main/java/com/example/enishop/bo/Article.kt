@@ -1,6 +1,6 @@
 package com.example.enishop.bo
 
-import java.util.Date
+import java.time.LocalDate
 
 data class Article(
     val id:Long,
@@ -9,5 +9,5 @@ data class Article(
     val price:Double,
     val urlImage:String,
     val category:String,
-    val date:Date,
+    val date: LocalDate,
 )
