@@ -4,13 +4,13 @@ plugins {
 }
 
 android {
-    namespace = "com.example.mod4rolldice"
-    compileSdk = 35
+    namespace = "com.example.mod4injectiondep"
+    compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.example.mod4rolldice"
+        applicationId = "com.example.mod4injectiondep"
         minSdk = 24
-        targetSdk = 35
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -51,7 +51,6 @@ android {
 
 dependencies {
 
-    implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.7")
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
