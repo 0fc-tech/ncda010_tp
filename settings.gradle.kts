@@ -20,7 +20,6 @@ dependencyResolutionManagement {
 }
 
 rootProject.name = "TP"
-include(":app")
 include(":mod2filmserie")
 include(":mod2bibliotheque")
 include(":enishop")
