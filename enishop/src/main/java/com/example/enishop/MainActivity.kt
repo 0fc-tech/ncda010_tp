@@ -1,23 +1,29 @@
 package com.example.enishop
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Done
 import androidx.compose.material.icons.filled.KeyboardArrowDown
 import androidx.compose.material3.Button
 import androidx.compose.material3.Card
@@ -25,6 +31,8 @@ import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
+import androidx.compose.material3.FilterChip
+import androidx.compose.material3.FilterChipDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -240,7 +248,9 @@ fun DetailProduitPage(modifier: Modifier = Modifier,
 @Composable
 fun ListeArticlesPage(modifier: Modifier = Modifier,
                       vm : ListeArticlesVM = viewModel()) {
-    val state = vm.listArticlesState.collectAsState()
+    val listState = vm.articlesFltr.collectAsState()
+    val categories = vm.listCategories.collectAsState()
+    val categoriesSelected = vm.categoriesSelected.collectAsState()
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
@@ -249,12 +259,25 @@ fun ListeArticlesPage(modifier: Modifier = Modifier,
             )
         }
     ) { innerPadding ->
+        Log.i(TAG, "ListeArticlesPage: ${innerPadding}")
         Column(Modifier.padding(innerPadding)) {
+            LazyRow() {
+                items(categories.value){category->
+                    FilterChipArticle(
+                        filterName = category,
+                        selected = categoriesSelected.value.contains(category),
+                        onChipSelected = {filterName,isSelected->
+                             vm.selectCategory(filterName,isSelected)
+                        }
+                    )
+                    Spacer(Modifier.padding(end =8.dp))
+                }
+            }
             LazyVerticalGrid(
                 columns = GridCells.Fixed(2),
                 Modifier.fillMaxSize()
             ) {
-                items(state.value) { article ->
+                items(listState.value) { article ->
                     Card(Modifier.padding(8.dp)) {
                         Column{
                             AsyncImage(
@@ -280,4 +303,24 @@ fun ListeArticlesPage(modifier: Modifier = Modifier,
 
         }
     }
+}
+@Composable
+fun FilterChipArticle(filterName:String,selected:Boolean,
+                      onChipSelected:(filterName:String, isSelected:Boolean) -> Unit) {
+    FilterChip(
+        onClick = { onChipSelected(filterName,!selected) },
+        label = { Text(filterName) },
+        selected = selected,
+        leadingIcon = if (selected) {
+            {
+                Icon(
+                    imageVector = Icons.Filled.Done,
+                    contentDescription = "Done icon",
+                    modifier = Modifier.size(FilterChipDefaults.IconSize)
+                )
+            }
+        } else {{
+             Spacer(Modifier.width(16.dp))
+        }},
+    )
 }

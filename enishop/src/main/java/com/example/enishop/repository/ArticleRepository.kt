@@ -14,4 +14,6 @@ object ArticleRepository {
 
     fun addAll(articles: List<Article>) =
         memoryDao.insertAll(articles)
+
+    fun getCategories() = getAll().map { it.category }.distinct()
 }
