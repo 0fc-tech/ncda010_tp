@@ -9,6 +9,7 @@ object ArticleRepository {
     val networkDao = DaoFactory.getDao(DaoType.NETWORK)
 
     fun getAll() = memoryDao.findAll()
+    fun getById(id:Long) = memoryDao.findById(id)
 
     fun add(article: Article) = memoryDao.insert(article)
 

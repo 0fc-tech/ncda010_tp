@@ -108,8 +108,9 @@ class ArticleDaoMemoryImpl :  ArticleDAO{
         =listArticles
 
     override fun insert(article: Article): Long? {
-        listArticles.add(article)
-        return listArticles.lastIndexOf(article).toLong()
+        val newID = (listArticles.maxOfOrNull { it.id }?:0) + 1
+        listArticles+=article.copy(id=newID)
+        return newID
     }
 
     override fun insertAll(articles: List<Article>){

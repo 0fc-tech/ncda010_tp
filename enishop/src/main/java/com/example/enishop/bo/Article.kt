@@ -3,7 +3,7 @@ package com.example.enishop.bo
 import java.time.LocalDate
 
 data class Article(
-    val id:Long,
+    var id:Long,
     val name:String,
     val description:String,
     val price:Double,
